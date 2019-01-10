@@ -24,12 +24,6 @@ sha256_zlib=c3e5e9fdd5004dcb542feda5ee4f0ff0744628baf8ed2dd5d66f8ca1197cb1a1
 sha256_openssl=fc20130f8b7cbd2fb918b2f14e2f429e109c31ddd0fb38fc5d71d9ffed3f9f41
 sha256_nginx=a8bdafbca87eb99813ae4fcac1ad0875bf725ce19eb265d28268c309b2b40787
 
-# Set OpenPGP keys used to sign downloads
-opgp_pcre=45F68D54BBE23FB3039B46E59766E084FB0F43D8
-opgp_zlib=5ED46A6721D365587791E2AA783FCD8E58BCAFBA
-opgp_openssl=8657ABB260F056B1E5190839D9C4D26D0E604491
-opgp_nginx=B0F4253373F8F6F510D42178520A9993A1C052F8
-
 # Set URLs to the source directories
 source_pcre=https://ftp.pcre.org/pub/pcre/
 source_zlib=https://zlib.net/
@@ -65,23 +59,6 @@ curl -L "${source_openssl}${version_openssl}.tar.gz" -o "${bpath}/openssl.tar.gz
   echo "${sha256_openssl} ${bpath}/openssl.tar.gz" | sha256sum -c -
 curl -L "${source_nginx}${version_nginx}.tar.gz" -o "${bpath}/nginx.tar.gz" && \
   echo "${sha256_nginx} ${bpath}/nginx.tar.gz" | sha256sum -c -
-
-# Download the signature files
-curl -L "${source_pcre}${version_pcre}.tar.gz.sig" -o "${bpath}/pcre.tar.gz.sig"
-curl -L "${source_zlib}${version_zlib}.tar.gz.asc" -o "${bpath}/zlib.tar.gz.asc"
-curl -L "${source_openssl}${version_openssl}.tar.gz.asc" -o "${bpath}/openssl.tar.gz.asc"
-curl -L "${source_nginx}${version_nginx}.tar.gz.asc" -o "${bpath}/nginx.tar.gz.asc"
-
-# Verify OpenPGP signature of the source files
-cd "$bpath"
-GNUPGHOME="$(mktemp -d)"
-export GNUPGHOME
-( gpg --keyserver ipv4.pool.sks-keyservers.net --recv-keys "$opgp_pcre" "$opgp_zlib" "$opgp_openssl" "$opgp_nginx" \
-|| gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "$opgp_pcre" "$opgp_zlib" "$opgp_openssl" "$opgp_nginx")
-gpg --batch --verify pcre.tar.gz.sig pcre.tar.gz
-gpg --batch --verify zlib.tar.gz.asc zlib.tar.gz
-gpg --batch --verify openssl.tar.gz.asc openssl.tar.gz
-gpg --batch --verify nginx.tar.gz.asc nginx.tar.gz
 
 # Expand the source files
 cd "$bpath"
