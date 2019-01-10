@@ -133,7 +133,7 @@ strip -s /usr/sbin/nginx*
 
 # Install man pages
 cp "$bpath/$version_nginx/man/nginx.8" /usr/share/man/man8
-gzip /usr/share/man/man8/nginx.8
+gzip -q /usr/share/man/man8/nginx.8
 
 if [ -d "/etc/nginx-${today}" ]; then
   # Rename the default /etc/nginx settings directory so it's accessible as a reference to the new NGINX defaults
