@@ -1,8 +1,8 @@
 # NGINX Forward Proxy Build Script
 
-This is an NGINX build script for creating a version of NGINX that can act as a forward proxy using [chobits/ngx_http_proxy_connect_module](https://github.com/chobits/ngx_http_proxy_connect_module.git).
+This is an NGINX build script for creating a version of NGINX that can act as a forward proxy using [chobits/ngx_http_proxy_connect_module](https://github.com/chobits/ngx_http_proxy_connect_module.git) on an Ubuntu machine.
 
-Compiling will take time, especially on a Raspberry Pi, so be patient.
+We build to `/usr/sbin`, so this script is not intended for running simultaneously with an `apt` installed version of `nginx`.
 
 ## Usage
 
