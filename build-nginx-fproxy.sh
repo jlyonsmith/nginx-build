@@ -68,7 +68,6 @@ done
 
 # Clean up source files
 rm -rf \
-  "$GNUPGHOME" \
   "$bpath"/*.tar.*
 
 # Clone HTTP proxy module
@@ -95,7 +94,7 @@ id -u nginx &>/dev/null || adduser --disabled-password --system --home /var/cach
 
 # Patch then configure NGINX with various modules included/excluded
 cd "$bpath/$version_nginx"
-patch -p1 $bpath/ngx_http_proxy_connect_module/patch/$proxy_patch_file
+patch -p1 < $bpath/ngx_http_proxy_connect_module/patch/$proxy_patch_file
 ./configure \
   --prefix=/etc/nginx \
   --with-pcre="$bpath/$version_pcre" \
