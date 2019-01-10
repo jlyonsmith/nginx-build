@@ -116,6 +116,7 @@ patch -p1 < $bpath/ngx_http_proxy_connect_module/patch/$proxy_patch_file
   --group=nginx \
   --with-stream \
   --with-stream_ssl_module \
+  --with-stream_ssl_preread_module \
   --add-module="$bpath/ngx_http_proxy_connect_module" \
   --with-threads \
   --without-http_empty_gif_module \
@@ -129,6 +130,10 @@ make
 make install
 make clean
 strip -s /usr/sbin/nginx*
+
+# Install man pages
+cp "$bpath/$version_nginx/man/nginx.8" /usr/share/man/man8
+gzip /usr/share/man/man8/nginx.8
 
 if [ -d "/etc/nginx-${today}" ]; then
   # Rename the default /etc/nginx settings directory so it's accessible as a reference to the new NGINX defaults
@@ -145,7 +150,7 @@ if [ ! -e "/lib/systemd/system/nginx.service" ]; then
 
   /bin/cat >$file <<'EOF'
 [Unit]
-Description=The NGINX HTTP and reverse proxy server
+Description=The NGINX reverse and forward proxy server
 After=syslog.target network.target remote-fs.target nss-lookup.target
 
 [Service]

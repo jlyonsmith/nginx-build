@@ -12,22 +12,20 @@ NOTE: Always review downloaded scripts before executing.
 
 1. `sudo mkdir /usr/local/src/nginx/`
 2. `cd /usr/local/src/nginx/`
-3. `sudo curl -L https://raw.githubusercontent.com/jlyonsmith/nginx-build-fproxy/master/build-nginx-fproxy.sh -o nginx-build-fproxy.sh`
-4. `cat nginx-build-fproxy.sh`
-5. `sudo chmod +x nginx-build-fproxy.sh`
-6. `sudo ./nginx-build-fproxy.sh`
-7. `sudo nginx`
+3. `sudo curl -L https://raw.githubusercontent.com/jlyonsmith/nginx-build-fproxy/master/build-nginx-fproxy.sh -o build-nginx-fproxy.sh`
+4. `sudo chmod +x build-nginx-fproxy.sh`
+5. `sudo ./build-nginx-fproxy.sh`
+6. `sudo nginx`
 
 ### Upgrading
 
 1. `cd /usr/local/src/nginx/`
 2. `sudo rm /usr/local/src/nginx/nginx-build-fproxy.sh`
-3. `sudo curl -L https://raw.githubusercontent.com/jlyonsmith/nginx-build-fproxy/master/build-nginx-fproxy.sh -o nginx-build-fproxy.sh`
-4. `cat nginx-build-fproxy.sh`
-5. `sudo chmod +x nginx-build-fproxy.sh`
-6. `sudo kill -QUIT $( cat /var/run/nginx.pid )`
-7. `sudo ./nginx-build-fproxy.sh`
-8. `sudo nginx`
+3. `sudo curl -L https://raw.githubusercontent.com/jlyonsmith/nginx-build-fproxy/master/build-nginx-fproxy.sh -o build-nginx-fproxy.sh`
+4. `sudo chmod +x build-nginx-fproxy.sh`
+5. `sudo kill -QUIT $( cat /var/run/nginx.pid )`
+6. `sudo ./build-nginx-fproxy.sh`
+7. `sudo nginx`
 
 ## Issues
 
