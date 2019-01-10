@@ -116,7 +116,7 @@ patch -p1 < $bpath/ngx_http_proxy_connect_module/patch/$proxy_patch_file
   --group=nginx \
   --with-stream \
   --with-stream_ssl_module \
-  --add-module=$bpath/ngx_http_proxy_connect_module
+  --add-module="$bpath/ngx_http_proxy_connect_module" \
   --with-threads \
   --without-http_empty_gif_module \
   --without-http_geo_module \
