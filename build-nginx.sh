@@ -15,6 +15,9 @@ version_zlib=zlib-1.2.11
 version_openssl=openssl-1.1.1a
 version_nginx=nginx-1.15.8
 
+# See https://github.com/chobits/ngx_http_proxy_connect_module#install for patch/NGINX version
+proxy_patch_file=proxy_connect_rewrite_1015.patch
+
 # Set checksums of latest versions
 sha256_pcre=69acbc2fbdefb955d42a4c606dfde800c2885711d2979e356c0636efde9ec3b5
 sha256_zlib=c3e5e9fdd5004dcb542feda5ee4f0ff0744628baf8ed2dd5d66f8ca1197cb1a1
@@ -91,6 +94,9 @@ rm -rf \
   "$GNUPGHOME" \
   "$bpath"/*.tar.*
 
+# Clone HTTP proxy module
+git clone https://github.com/chobits/ngx_http_proxy_connect_module.git
+
 # Rename the existing /etc/nginx directory so it's saved as a back-up
 if [ -d "/etc/nginx" ]; then
   mv /etc/nginx "/etc/nginx-${today}"
@@ -110,23 +116,13 @@ fi
 id -g nginx &>/dev/null || addgroup --system nginx
 id -u nginx &>/dev/null || adduser --disabled-password --system --home /var/cache/nginx --shell /sbin/nologin --group nginx
 
-# Test to see if our version of gcc supports __SIZEOF_INT128__
-if gcc -dM -E - </dev/null | grep -q __SIZEOF_INT128__
-then
-  ecflag="enable-ec_nistp_64_gcc_128"
-else
-  ecflag=""
-fi
-
-# Build NGINX, with various modules included/excluded
+# Patch then configure NGINX with various modules included/excluded
 cd "$bpath/$version_nginx"
+patch -p1 $bpath/ngx_http_proxy_connect_module/patch/$proxy_patch_file
 ./configure \
   --prefix=/etc/nginx \
-  --with-cc-opt="-O3 -fPIE -fstack-protector-strong -Wformat -Werror=format-security" \
-  --with-ld-opt="-Wl,-Bsymbolic-functions -Wl,-z,relro" \
   --with-pcre="$bpath/$version_pcre" \
   --with-zlib="$bpath/$version_zlib" \
-  --with-openssl-opt="no-weak-ssl-ciphers no-ssl3 no-shared $ecflag -DOPENSSL_NO_HEARTBEATS -fstack-protector-strong" \
   --with-openssl="$bpath/$version_openssl" \
   --sbin-path=/usr/sbin/nginx \
   --modules-path=/usr/lib/nginx/modules \
@@ -142,21 +138,9 @@ cd "$bpath/$version_nginx"
   --http-scgi-temp-path=/var/cache/nginx/scgi_temp \
   --user=nginx \
   --group=nginx \
-  --with-file-aio \
-  --with-http_auth_request_module \
-  --with-http_gunzip_module \
-  --with-http_gzip_static_module \
-  --with-http_mp4_module \
-  --with-http_realip_module \
-  --with-http_secure_link_module \
-  --with-http_slice_module \
-  --with-http_ssl_module \
-  --with-http_stub_status_module \
-  --with-http_sub_module \
-  --with-http_v2_module \
-  --with-pcre-jit \
   --with-stream \
   --with-stream_ssl_module \
+  --add-module=$bpath/ngx_http_proxy_connect_module
   --with-threads \
   --without-http_empty_gif_module \
   --without-http_geo_module \
